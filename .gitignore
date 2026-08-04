@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Dependencies
+**/node_modules/
+
+# Build outputs
+releases/
+deer-app/dist/
+deer-app/src-tauri/target/
+
+# Android generated (contains signing keys)
+deer-app/src-tauri/gen/
+
+# Keystore and signing
+*.jks
+keystore.properties
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cache
+.npm-cache/

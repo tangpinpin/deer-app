@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+/* ===== 鹿了吗 — 全局样式 ===== */
+
+:root {
+  --mood-energetic: #4ade80;
+  --mood-satisfied: #facc15;
+  --mood-depressed: #f87171;
+  --surface: rgba(22, 33, 62, 0.75);
+  --surface-light: rgba(255, 255, 255, 0.07);
+  --text-primary: #f0e6d8;
+  --text-secondary: #a89b8c;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: transparent !important;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  color: var(--text-primary);
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+}
+
+/* ===== 可拖动区域 ===== */
+.drag-region {
+  -webkit-app-region: drag;
+  cursor: grab;
+}
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* ===== 玻璃卡片 ===== */
+.glass {
+  background: rgba(22, 33, 62, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.glass-light {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ===== 小鹿动画 ===== */
+@keyframes breathe {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(1.03) scaleX(0.98); }
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-10px); }
+  50% { transform: translateY(0); }
+  70% { transform: translateY(-4px); }
+}
+@keyframes tremble {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-2px) rotate(-0.8deg); }
+  75% { transform: translateX(2px) rotate(0.8deg); }
+}
+@keyframes float-up {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-80px) scale(0); opacity: 0; }
+}
+@keyframes pop-in {
+  0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes glow-pulse {
+  0%, 100% { filter: drop-shadow(0 0 6px currentColor); }
+  50% { filter: drop-shadow(0 0 18px currentColor); }
+}
+@keyframes ear-left {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(-15deg); }
+}
+@keyframes ear-right {
+  0%, 100% { transform: rotate(5deg); }
+  50% { transform: rotate(15deg); }
+}
+
+/* ===== 三大独立状态动画 ===== */
+
+/* 挺拔 — 精力充沛，微微蹦跳，等你来摸 */
+@keyframes energetic-bounce {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  15% { transform: translateY(-6px) scaleY(0.97); }
+  30% { transform: translateY(0) scaleY(1.02); }
+  45% { transform: translateY(-3px) scaleY(0.98); }
+  60% { transform: translateY(0) scaleY(1); }
+}
+.anim-energetic { animation: energetic-bounce 1.8s ease-in-out infinite; }
+
+/* 沮丧 — 微微颤抖，慢慢晃动，回味被摸的感觉 */
+@keyframes depressed-sway {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  20% { transform: translateX(-3px) rotate(-1deg); }
+  40% { transform: translateX(1px) rotate(0.3deg); }
+  60% { transform: translateX(3px) rotate(0.8deg); }
+  80% { transform: translateX(-1px) rotate(-0.3deg); }
+}
+.anim-depressed { animation: depressed-sway 3.5s ease-in-out infinite; }
+
+/* 满足 — 被抚摸时开心蹦跳 + 缩放脉冲 */
+@keyframes satisfied-pop {
+  0%, 100% { transform: translateY(0) scale(1); }
+  20% { transform: translateY(-12px) scale(1.06); }
+  40% { transform: translateY(0) scale(0.98); }
+  60% { transform: translateY(-6px) scale(1.03); }
+  80% { transform: translateY(0) scale(1); }
+}
+.anim-satisfied { animation: satisfied-pop 1s ease-in-out infinite; }
+
+/* "正在鹿！！！" 文字动画 */
+@keyframes satisfied-text-pop {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+.anim-satisfied-text { animation: satisfied-text-pop 0.6s ease-in-out infinite; }
+
+/* 通用保留 */
