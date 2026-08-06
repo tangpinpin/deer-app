@@ -22,6 +22,9 @@ export interface DeerState {
   unlocked_achievements: string[];
   reminder_interval_seconds: number;
   recent_pet_timestamps: number[];
+  dnd_enabled: boolean;
+  dnd_start: string;
+  dnd_end: string;
 }
 
 export interface PetResult {

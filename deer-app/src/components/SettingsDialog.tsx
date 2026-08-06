@@ -1,5 +1,5 @@
 import { useDeerStore } from "../stores/deerStore";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const INTERVAL_OPTIONS = [
   { label: "⚡ 30 秒（测试用）", seconds: 30 },
@@ -10,9 +10,36 @@ const INTERVAL_OPTIONS = [
 ];
 
 export default function SettingsDialog() {
-  const { toggleSettings, deerState, setReminderInterval, skipDay } = useDeerStore();
+  const { toggleSettings, deerState, setReminderInterval, setDoNotDisturb, skipDay } = useDeerStore();
+
+  // 免打扰本地状态（后端持久化，这里做输入镜像）
+  const [dndEnabled, setDndEnabled] = useState(false);
   const [dndStart, setDndStart] = useState("22:00");
   const [dndEnd, setDndEnd] = useState("08:00");
+  const initialized = useRef(false);
+
+  // 从后端状态同步一次（避免每次渲染都覆盖用户正在编辑的输入）
+  useEffect(() => {
+    if (deerState && !initialized.current) {
+      initialized.current = true;
+      setDndEnabled(deerState.dnd_enabled);
+      setDndStart(deerState.dnd_start || "22:00");
+      setDndEnd(deerState.dnd_end || "08:00");
+    }
+  }, [deerState]);
+
+  const handleDndEnabled = (v: boolean) => {
+    setDndEnabled(v);
+    setDoNotDisturb(v, dndStart, dndEnd);
+  };
+  const handleDndStart = (v: string) => {
+    setDndStart(v);
+    setDoNotDisturb(dndEnabled, v, dndEnd);
+  };
+  const handleDndEnd = (v: string) => {
+    setDndEnd(v);
+    setDoNotDisturb(dndEnabled, dndStart, v);
+  };
 
   const currentSeconds = deerState?.reminder_interval_seconds ?? 7200;
 
@@ -48,21 +75,44 @@ export default function SettingsDialog() {
           </div>
         </div>
 
-        {/* 免打扰 (占位) */}
-        <div className="mb-4 opacity-50">
-          <label className="block text-xs text-white/50 mb-1.5">🌙 免打扰时段（即将推出）</label>
-          <div className="flex items-center gap-2">
+        {/* 免打扰时段 */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="text-xs text-white/50">🌙 免打扰时段</label>
+            <button
+              role="switch"
+              aria-checked={dndEnabled}
+              onClick={() => handleDndEnabled(!dndEnabled)}
+              className={`relative w-9 h-5 rounded-full transition-colors no-drag ${
+                dndEnabled ? "bg-amber-500/70" : "bg-white/15"
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                  dndEnabled ? "translate-x-4" : "translate-x-0.5"
+                }`}
+              />
+            </button>
+          </div>
+          <div className={`flex items-center gap-2 ${dndEnabled ? "" : "opacity-40"}`}>
             <input
-              type="time" value={dndStart} disabled
-              onChange={(e) => setDndStart(e.target.value)}
-              className="flex-1 bg-white/10 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white/40 focus:outline-none"
+              type="time"
+              value={dndStart}
+              disabled={!dndEnabled}
+              onChange={(e) => handleDndStart(e.target.value)}
+              className="flex-1 bg-white/10 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white/80 focus:outline-none focus:border-amber-500/50 disabled:cursor-not-allowed"
             />
             <span className="text-white/30 text-xs">至</span>
             <input
-              type="time" value={dndEnd} disabled
-              onChange={(e) => setDndEnd(e.target.value)}
-              className="flex-1 bg-white/10 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white/40 focus:outline-none"
+              type="time"
+              value={dndEnd}
+              disabled={!dndEnabled}
+              onChange={(e) => handleDndEnd(e.target.value)}
+              className="flex-1 bg-white/10 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white/80 focus:outline-none focus:border-amber-500/50 disabled:cursor-not-allowed"
             />
+          </div>
+          <div className="mt-1 text-[10px] text-white/40">
+            免打扰期间提醒会顺延，时段结束后如果仍超时再弹
           </div>
         </div>
 

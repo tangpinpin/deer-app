@@ -40,6 +40,7 @@ interface DeerStore {
   toggleAchievements: () => void;
   toggleCredits: () => void;
   setReminderInterval: (seconds: number) => Promise<void>;
+  setDoNotDisturb: (enabled: boolean, start: string, end: string) => Promise<void>;
   skipDay: () => Promise<void>;
   spawnParticle: (x: number, y: number, emoji: string) => void;
   clearParticles: () => void;
@@ -125,6 +126,16 @@ export const useDeerStore = create<DeerStore>((set) => ({
       const invoke = await getInvoke();
       const state = await invoke<DeerState>("set_reminder_interval", { seconds });
       set({ deerState: state });
+    } catch (e) {
+      set({ error: String(e) });
+    }
+  },
+
+  setDoNotDisturb: async (enabled: boolean, start: string, end: string) => {
+    try {
+      const invoke = await getInvoke();
+      const state = await invoke<DeerState>("set_do_not_disturb", { enabled, start, end });
+      set({ deerState: state, error: null });
     } catch (e) {
       set({ error: String(e) });
     }

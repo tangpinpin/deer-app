@@ -1,13 +1,6 @@
 {
-  "gitHead": "4a5d188ca2446c9a4827957cf1168319b2de009c",
+  "gitHead": "d56204dbbc8257ba58a28a5c73eddbcdbec37284",
   "passed": true,
-  "summary": "Oxlint 通过，2 个 warnings（exhaustive-deps），无 errors",
-  "details": {
-    "test_runner": "oxlint",
-    "warnings": [
-      "AchievementToast.tsx:19 - useEffect missing dependency: deerState",
-      "StatusBar.tsx:17 - useEffect missing dependency: deerState"
-    ]
-  },
-  "timestamp": "2026-08-06T14:28:37Z"
+  "results": "cargo test: 8 passed, 0 failed, 0 ignored. npm test script not configured.",
+  "timestamp": "2026-08-06T16:45:35Z"
 }

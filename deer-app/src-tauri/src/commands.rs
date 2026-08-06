@@ -76,6 +76,21 @@ pub fn set_reminder_interval(state: State<AppState>, seconds: i64) -> Result<Dee
     Ok(deer.clone())
 }
 
+/// 设置免打扰时段
+#[tauri::command]
+pub fn set_do_not_disturb(
+    state: State<AppState>,
+    enabled: bool,
+    start: String,
+    end: String,
+) -> Result<DeerState, String> {
+    let mut deer = state.deer.lock().map_err(|e| e.to_string())?;
+    deer.set_do_not_disturb(enabled, &start, &end)?;
+    // 重置提醒标记: 若免打扰期间已超时, 关闭后下一轮会补发提醒
+    REMINDER_SENT.store(false, Ordering::SeqCst);
+    Ok(deer.clone())
+}
+
 /// 手动保存状态
 #[tauri::command]
 pub fn save_state(state: State<AppState>, app: tauri::AppHandle) -> Result<(), String> {

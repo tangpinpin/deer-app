@@ -77,6 +77,7 @@ pub fn run() {
             commands::ack_reminder,
             commands::save_state,
             commands::set_reminder_interval,
+            commands::set_do_not_disturb,
             commands::skip_day,
         ])
         .run(tauri::generate_context!())
