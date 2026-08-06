@@ -102,7 +102,7 @@ impl Default for DeerState {
             last_check_date: String::new(),
             pets_today: 0,
             today_date: String::new(),
-            last_pet_hour: 0,
+            last_pet_hour: 24, // 24 = 未设置，避免与合法小时值 0-23 冲突
             last_reminder_time: 0,
             newly_unlocked: Vec::new(),
             unlocked_achievements: Vec::new(),
@@ -137,7 +137,7 @@ impl DeerState {
         if self.last_check_date != today {
             let yesterday = now_dt
                 .checked_sub_signed(chrono::Duration::days(1))
-                .unwrap()
+                .unwrap_or(now_dt)
                 .format("%Y-%m-%d")
                 .to_string();
             if self.last_check_date == yesterday {

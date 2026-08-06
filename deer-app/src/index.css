@@ -129,4 +129,13 @@ html, body {
 }
 .anim-satisfied-text { animation: satisfied-text-pop 0.6s ease-in-out infinite; }
 
-/* 通用保留 */
+/* 通用动画类 */
+.anim-float {
+  animation: float-up 1.5s ease-out forwards;
+}
+.anim-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+.animate-pop {
+  animation: pop-in 0.5s ease-out forwards;
+}

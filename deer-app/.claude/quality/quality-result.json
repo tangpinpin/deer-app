@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "gitHead": "4a5d188ca2446c9a4827957cf1168319b2de009c",
+  "timestamp": "2026-08-06T13:37:38Z",
+  "checks": {
+    "typescript": { "status": "passed", "errors": 0 },
+    "oxlint": { "status": "passed", "errors": 0, "warnings": 2, "warning_detail": ["src/components/AchievementToast.tsx:19 - exhaustive-deps", "src/components/StatusBar.tsx:17 - exhaustive-deps"] },
+    "vite_build": { "status": "passed", "errors": 0 },
+    "rust_cargo_check": { "status": "passed", "errors": 0, "warnings": 1, "warning_detail": ["src/deer_state.rs:257 - dead_code: method level_progress never used"] },
+    "npm_audit": { "status": "skipped", "reason": "npm registry mirror does not support audit endpoint" },
+    "cargo_outdated_audit": { "status": "skipped", "reason": "cargo-outdated and cargo-audit tools not installed" },
+    "project_structure": { "status": "passed", "notes": "All required config files present. Android gen/ dir is gitignored (371MB build artifacts). src/vite-env.d.ts missing but types covered by tsconfig." }
+  },
+  "conclusion": "All executed checks passed. 0 blocking errors. 3 minor warnings (2 oxlint exhaustive-deps, 1 Rust dead_code). Project is release-ready."
+}

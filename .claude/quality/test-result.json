@@ -1,0 +1,13 @@
+{
+  "gitHead": "4a5d188ca2446c9a4827957cf1168319b2de009c",
+  "passed": true,
+  "summary": "Oxlint 通过，2 个 warnings（exhaustive-deps），无 errors",
+  "details": {
+    "test_runner": "oxlint",
+    "warnings": [
+      "AchievementToast.tsx:19 - useEffect missing dependency: deerState",
+      "StatusBar.tsx:17 - useEffect missing dependency: deerState"
+    ]
+  },
+  "timestamp": "2026-08-06T14:28:37Z"
+}

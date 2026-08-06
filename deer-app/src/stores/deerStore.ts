@@ -1,6 +1,17 @@
 import { create } from "zustand";
 import type { DeerState, ReminderCheck } from "../types/deer";
 
+// 缓存 Tauri invoke，避免每个方法重复动态导入
+type InvokeFn = <T>(cmd: string, args?: Record<string, unknown>) => Promise<T>;
+let _invoke: InvokeFn | null = null;
+async function getInvoke(): Promise<InvokeFn> {
+  if (!_invoke) {
+    const mod = await import("@tauri-apps/api/core");
+    _invoke = mod.invoke as InvokeFn;
+  }
+  return _invoke;
+}
+
 interface DeerStore {
   // 状态
   deerState: DeerState | null;
@@ -39,6 +50,7 @@ export interface Particle {
   x: number;
   y: number;
   emoji: string;
+  delay: number;
 }
 
 let particleId = 0;
@@ -56,7 +68,7 @@ export const useDeerStore = create<DeerStore>((set) => ({
 
   fetchState: async () => {
     try {
-      const { invoke } = await import("@tauri-apps/api/core");
+      const invoke = await getInvoke();
       const state = await invoke<DeerState>("get_deer_state");
       set({ deerState: state, loading: false, error: null });
     } catch (e) {
@@ -66,7 +78,7 @@ export const useDeerStore = create<DeerStore>((set) => ({
 
   pet: async () => {
     try {
-      const { invoke } = await import("@tauri-apps/api/core");
+      const invoke = await getInvoke();
       const result = await invoke<{ result: string; state: DeerState }>("pet_deer");
       set({ deerState: result.state, reminder: null, showReminder: false });
       return result.result as "ok" | "leveled_up" | "cooldown";
@@ -78,7 +90,7 @@ export const useDeerStore = create<DeerStore>((set) => ({
 
   endPet: async () => {
     try {
-      const { invoke } = await import("@tauri-apps/api/core");
+      const invoke = await getInvoke();
       const state = await invoke<DeerState>("end_pet_deer");
       set({ deerState: state });
     } catch (e) {
@@ -88,7 +100,7 @@ export const useDeerStore = create<DeerStore>((set) => ({
 
   checkReminder: async () => {
     try {
-      const { invoke } = await import("@tauri-apps/api/core");
+      const invoke = await getInvoke();
       const result = await invoke<ReminderCheck>("check_reminder");
       set({
         reminder: result,
@@ -99,7 +111,7 @@ export const useDeerStore = create<DeerStore>((set) => ({
 
   dismissReminder: () => {
     set({ showReminder: false });
-    import("@tauri-apps/api/core").then(({ invoke }) =>
+    getInvoke().then((invoke) =>
       invoke("ack_reminder").catch(() => {})
     );
   },
@@ -110,7 +122,7 @@ export const useDeerStore = create<DeerStore>((set) => ({
 
   setReminderInterval: async (seconds: number) => {
     try {
-      const { invoke } = await import("@tauri-apps/api/core");
+      const invoke = await getInvoke();
       const state = await invoke<DeerState>("set_reminder_interval", { seconds });
       set({ deerState: state });
     } catch (e) {
@@ -120,7 +132,8 @@ export const useDeerStore = create<DeerStore>((set) => ({
 
   spawnParticle: (x, y, emoji) => {
     const id = ++particleId;
-    set((s) => ({ particles: [...s.particles, { id, x, y, emoji }] }));
+    const delay = Math.random() * 0.2;
+    set((s) => ({ particles: [...s.particles, { id, x, y, emoji, delay }] }));
     setTimeout(() => {
       set((s) => ({ particles: s.particles.filter((p) => p.id !== id) }));
     }, 1500);
@@ -130,7 +143,7 @@ export const useDeerStore = create<DeerStore>((set) => ({
 
   skipDay: async () => {
     try {
-      const { invoke } = await import("@tauri-apps/api/core");
+      const invoke = await getInvoke();
       const state = await invoke<DeerState>("skip_day");
       set({ deerState: state });
     } catch (e) {

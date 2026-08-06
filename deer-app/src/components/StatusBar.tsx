@@ -92,7 +92,7 @@ export default function StatusBar() {
           <div
             className="h-full transition-all duration-500 rounded-r"
             style={{
-              width: `${((deerState.affection % 200) / 200) * 100}%`,
+              width: `${deerState.level >= 50 ? 100 : ((deerState.affection - (deerState.level - 1) * 200) / 200) * 100}%`,
               backgroundColor: moodInfo.color,
             }}
           />

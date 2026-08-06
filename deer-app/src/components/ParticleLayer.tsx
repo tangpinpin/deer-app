@@ -17,7 +17,7 @@ export default function ParticleLayer() {
             left: p.x,
             top: p.y,
             fontSize: p.emoji.length > 1 ? 18 : 20,
-            animationDelay: `${Math.random() * 0.2}s`,
+            animationDelay: `${p.delay}s`,
           }}
         >
           {p.emoji}

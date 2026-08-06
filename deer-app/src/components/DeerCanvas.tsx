@@ -196,9 +196,10 @@ function DeerSVG({ mood, isPetting }: { mood: string; isPetting: boolean }) {
 
   return (
     <div
-      className={`transition-transform duration-700 ${animClass}`}
       style={{ transform: `scale(${scale})` }}
+      className="transition-transform duration-700"
     >
+      <div className={animClass}>
       <svg
         width="220"
         height="280"
@@ -209,6 +210,7 @@ function DeerSVG({ mood, isPetting }: { mood: string; isPetting: boolean }) {
       >
         {mood === "depressed" ? <DepressedDeer /> : mood === "satisfied" ? <SatisfiedDeer /> : <EnergeticDeer />}
       </svg>
+        </div>
     </div>
   );
 }

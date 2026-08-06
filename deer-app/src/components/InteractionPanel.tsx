@@ -13,6 +13,11 @@ export default function InteractionPanel() {
           label="抚摸"
           hint="点击小鹿或按此按钮抚摸"
           primary
+          onClick={() => {
+            import("../stores/deerStore").then(({ useDeerStore }) => {
+              useDeerStore.getState().pet();
+            });
+          }}
         />
         <ActionButton
           icon={<Award size={18} />}

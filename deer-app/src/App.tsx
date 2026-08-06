@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { listen } from "@tauri-apps/api/event";
 import DeerCanvas from "./components/DeerCanvas";
 import StatusBar from "./components/StatusBar";
 import InteractionPanel from "./components/InteractionPanel";
@@ -20,12 +21,10 @@ export default function App() {
 
     // 监听 Tauri 提醒事件
     let unlisten: (() => void) | undefined;
-    import("@tauri-apps/api/event").then(({ listen }) => {
-      listen("reminder-triggered", () => {
-        useDeerStore.getState().checkReminder();
-      }).then((fn) => {
-        unlisten = fn;
-      });
+    listen("reminder-triggered", () => {
+      useDeerStore.getState().checkReminder();
+    }).then((fn) => {
+      unlisten = fn;
     });
 
     return () => {

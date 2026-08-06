@@ -1,0 +1,19 @@
+{
+  "gitHead": "4a5d188ca2446c9a4827957cf1168319b2de009c",
+  "passed": true,
+  "summary": "TypeScript 类型检查 + Rust 编译检查全部通过",
+  "details": {
+    "typescript": {
+      "exit_code": 0,
+      "status": "通过"
+    },
+    "rust_cargo_check": {
+      "exit_code": 0,
+      "status": "通过",
+      "warnings": [
+        "method level_progress is never used (dead_code)"
+      ]
+    }
+  },
+  "timestamp": "2026-08-06T14:28:37Z"
+}
